@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="677.0" prefWidth="627.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AdminBookRoomController">
+   <children>
+      <Label layoutX="21.0" layoutY="22.0" text="Hotel Reservation System">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="18.0" layoutY="149.0" prefHeight="467.0" prefWidth="555.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="228.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="327.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="No of guests:" />
+            <Label text="Choose the room type and enter the number of rooms you need:" wrapText="true" GridPane.rowIndex="1" />
+            <Label text="Check-in date:" GridPane.rowIndex="5" />
+            <TextField fx:id="noOfGuestField" maxWidth="-Infinity" prefWidth="160.0" promptText="How many guests?" GridPane.columnIndex="1" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <CheckBox fx:id="singleCheckBox" mnemonicParsing="false" text="Single            " />
+                  <Label text="x" />
+                  <TextField fx:id="singleField" prefWidth="80.0" />
+               </children>
+            </HBox>
+            <DatePicker fx:id="checkInDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-in date" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Check-out date:" GridPane.rowIndex="6" />
+            <DatePicker fx:id="checkOutDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-out date" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <CheckBox fx:id="doubleCheckBox" mnemonicParsing="false" text="Double         " />
+                  <Label text="x" />
+                  <TextField fx:id="doubleField" prefWidth="80.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <CheckBox fx:id="deluxCheckBox" mnemonicParsing="false" text="Delux            " />
+                  <Label text="x" />
+                  <TextField fx:id="deluxField" prefWidth="80.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <CheckBox fx:id="pentHouseCheckBox" mnemonicParsing="false" text="Pent House" />
+                  <Label text="x" />
+                  <TextField fx:id="pentHouseField" prefWidth="80.0" />
+               </children>
+            </HBox>
+            <Label text="Discounts:" GridPane.rowIndex="7" />
+            <Slider fx:id="discountSlider" blockIncrement="5.0" majorTickUnit="5.0" max="25.0" maxWidth="-Infinity" min="5.0" minorTickCount="0" prefWidth="200.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+         </children>
+      </GridPane>
+      <HBox alignment="CENTER" layoutX="24.0" layoutY="52.0" prefHeight="71.0" prefWidth="536.0" spacing="15.0">
+         <children>
+            <Label text="There are " />
+            <TextField fx:id="availableRoomField" />
+            <Label text="available rooms in the system." />
+         </children>
+      </HBox>
+      <Separator layoutX="74.0" layoutY="120.0" prefHeight="17.0" prefWidth="435.0" />
+      <Button fx:id="addGuestInfoButton" layoutX="320.0" layoutY="625.0" mnemonicParsing="false" onAction="#handleAddGuestInfo" text="Add Guest Info" />
+      <Button fx:id="cancelButton" layoutX="453.0" layoutY="625.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+   </children>
+</AnchorPane>
