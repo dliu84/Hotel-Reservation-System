@@ -89,6 +89,15 @@ public class GuestInfoController {
                 lastNameField.setStyle(""); // Reset style
             }
         });
+        
+        addressField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!isValidAddress(newValue)) {
+                // Invalid name, handle error
+                addressField.setStyle("-fx-border-color: red;");
+            } else {
+                addressField.setStyle(""); // Reset style
+            }
+        });
 
         phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!isValidPhoneNumber(newValue)) {
@@ -118,6 +127,11 @@ public class GuestInfoController {
         // Basic name validation
         return name.matches("[a-zA-Z]+");
     }
+    
+    private boolean isValidAddress(String address) {
+        // Basic name validation
+        return address.matches("[a-zA-Z]+");
+    }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
         // Basic phone number validation (digits only)
@@ -131,10 +145,72 @@ public class GuestInfoController {
     
     @FXML
     void handleBook(ActionEvent event) {
-    		
-    	Guest guest = new Guest(titleField.getText().trim(), firstNameField.getText().trim(), 
-    			lastNameField.getText().trim(), addressField.getText().trim(), 
-    			Integer.parseInt(phoneField.getText().trim()), emailField.getText().trim());
+    	
+    	String title;
+    	String fName;
+    	String lName;
+    	String address;
+    	int phone;
+    	String email;
+    	
+    	if (titleField.getText().trim().isEmpty() || firstNameField.getText().trim().isEmpty() ||
+    			lastNameField.getText().trim().isEmpty() || addressField.getText().trim().isEmpty() ||
+    			phoneField.getText().trim().isEmpty() || emailField.getText().trim().isEmpty()) {
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please fill in your information.");
+    		return;
+    	}
+    	
+    	try {
+    		title = titleField.getText().trim();
+    	}catch(NumberFormatException e){
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid title.");
+    		return;
+    	}
+    	
+    	try {
+    		fName = firstNameField.getText().trim();
+    	}catch(NumberFormatException e){
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid first name.");
+    		return;
+    	}
+    	
+    	try {
+    		lName = lastNameField.getText().trim();
+    	}catch(NumberFormatException e){
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid last name.");
+    		return;
+    	}	
+    	
+    	try {
+    		address = addressField.getText().trim();
+    	}catch(NumberFormatException e){
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid address.");
+    		return;
+    	}
+    	
+    	try {
+    		phone = Integer.parseInt(phoneField.getText().trim());
+    	}catch(NumberFormatException e){
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid phone number.");
+    		return;
+    	}
+    	
+    	try {
+    		email = emailField.getText().trim();
+    	}catch(NumberFormatException e){
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a email address.");
+    		return;
+    	}
+    	
+    	if (!(isValidTitle(title) && isValidName(fName) && isValidName(lName) && isValidAddress(address)  
+    			&& isValidPhoneNumber(phoneField.getText().trim()) && isValidEmail(email))) {
+    
+    		showAlert(Alert.AlertType.ERROR, "Error", "Please verify your input.");
+    		return;
+    	}
+    	
+    	// construct a Guest object
+    	Guest guest = new Guest(title, fName, lName, address, phone, email); 
     	
     	reservation.setGuest(guest);
     	
@@ -146,7 +222,7 @@ public class GuestInfoController {
     	
     	System.out.println("the number of rooms after guest booking is: " + rooms.size());
     	
-    	showAlertWithRoomTypes(Alert.AlertType.CONFIRMATION, "Congratulations!", reservation, bookedRooms);
+    	showAlertWithRoomTypes(Alert.AlertType.INFORMATION, "ABC Hotel reservation inforamtion", reservation, bookedRooms);
     	
     }
 
@@ -166,19 +242,6 @@ public class GuestInfoController {
     }
     
     public void showAlertWithRoomTypes(Alert.AlertType alertType, String title, Reservation reservation, List<Room> bookedRooms) {
-
-    	/*Map<RoomTypeName, Integer> roomTypeCount = new HashMap<>();
-
-        // Count occurrences of each room type
-        for (Room room : bookedRooms) {
-            RoomTypeName roomType = room.getRoomType();
-            roomTypeCount.put(roomType, roomTypeCount.getOrDefault(roomType, 0) + 1);
-        }
-
-        StringBuilder roomTypesInfo = new StringBuilder();
-        for (Map.Entry<RoomTypeName, Integer> entry : roomTypeCount.entrySet()) {
-            roomTypesInfo.append(entry.getKey()).append(": ").append(entry.getValue()).append(" room(s)\n");
-        }*/
     	
     	 Map<RoomTypeName, Integer> roomTypeCount = new HashMap<>();
          Map<RoomTypeName, Double> roomTypePrice = new HashMap<>();
