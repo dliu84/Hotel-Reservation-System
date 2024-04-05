@@ -270,7 +270,7 @@ public class GuestInfoController {
                 "Check out date: " + reservation.getCheckOutDate() + "\n" + "\n" +
                 "Rooms:\n" +
                 roomTypesInfo.toString() + "\n" +
-                "The total amount is: " + reservation.getBill().getAmount() + "\n\n" + 
+                "The total amount is: $" + reservation.getBill().getAmount() + "\n\n" + 
                 "We have sent a copy of reservation to your email address " + reservation.getGuest().getEmail() + "\n\n" +
                 "Thank you for booking with ABC Hotel!");
                 

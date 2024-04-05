@@ -49,10 +49,15 @@ public class AdminBookRoomGuestInfoController {
     
     private List<Room> rooms = new ArrayList<>();
     
+    int discount;
+    double originalTotal;
+    
     AdminBookRoomController abController= new AdminBookRoomController();
 
-    public void initData(Reservation reservation) {
+    public void initData(Reservation reservation, int discount, double originalTotal) {
         this.reservation = reservation;
+        this.discount = discount;
+        this.originalTotal = originalTotal;
         // Populate guest information fields with the data from reservation
     }
 
@@ -270,8 +275,9 @@ public class AdminBookRoomGuestInfoController {
                 "Check out date: " + reservation.getCheckOutDate() + "\n" + "\n" +
                 "Rooms:\n" +
                 roomTypesInfo.toString() + "\n" +
-                "The total amount is: " + reservation.getBill().getAmount() + " with "+ 
-                abController.getDiscount() + "%" + " discount" +  "\n\n" +           
+                "The total amount is: $" + reservation.getBill().getAmount() + " with "+ 
+                discount + "%" + " discount " + 
+                "($" + originalTotal * discount / 100 + ")" + "\n\n" +           
                 "We have sent a copy of reservation to your email address " + reservation.getGuest().getEmail() + "\n\n" +
                 "Thank you for booking with ABC Hotel!");
                 

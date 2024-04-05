@@ -96,6 +96,7 @@ public class AdminBookRoomController {
     LocalDate checkOutDateValue;
     long days;
     int discount;
+    double originalTotal;
     
     @FXML
     void initialize() {
@@ -276,6 +277,8 @@ public class AdminBookRoomController {
     	    		return;
     		 }
     		
+    		 originalTotal = amount * days;
+    		 
     		 bill = new Bill(amount * days * (100 - discount) / 100);
     		 
     		 System.out.println("the days are: " + days + "\n");
@@ -317,7 +320,7 @@ public class AdminBookRoomController {
                  Parent root = loader.load();
                  
                  AdminBookRoomGuestInfoController controller = loader.getController();
-                 controller.initData(reservation);
+                 controller.initData(reservation, discount, originalTotal);
                  
                  Stage stage = new Stage();
                  stage.setScene(new Scene(root));
@@ -357,6 +360,10 @@ public class AdminBookRoomController {
     
     public int getDiscount() {
     	return discount;
+    }
+    
+    public double getOriginalTotal() {
+    	return originalTotal;
     }
 }
 
