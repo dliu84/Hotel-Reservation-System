@@ -86,8 +86,6 @@ public class GuestBookRoomController {
     @FXML
     private List<Room> rooms = new ArrayList<>();
     List<Room> bookedRooms = new ArrayList<>();
-//	LocalDate checkInDateValue = checkInDate.getValue();
-//    LocalDate checkOutDateValue = checkOutDate.getValue();
     LocalDate checkInDateValue;
     LocalDate checkOutDateValue;
     long days;

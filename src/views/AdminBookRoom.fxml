@@ -32,42 +32,46 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="No of guests:" />
-            <Label text="Choose the room type and enter the number of rooms you need:" wrapText="true" GridPane.rowIndex="1" />
-            <Label text="Check-in date:" GridPane.rowIndex="5" />
+            <Label text="Choose the room type and enter the number of rooms you need:" wrapText="true" GridPane.rowIndex="3" />
+            <Label text="Check-in date:" GridPane.rowIndex="1" />
             <TextField fx:id="noOfGuestField" maxWidth="-Infinity" prefWidth="160.0" promptText="How many guests?" GridPane.columnIndex="1" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <CheckBox fx:id="singleCheckBox" mnemonicParsing="false" text="Single            " />
+                  <Label fx:id="priceOfSingle" text="100.00" />
                   <Label text="x" />
                   <TextField fx:id="singleField" prefWidth="80.0" />
                </children>
             </HBox>
-            <DatePicker fx:id="checkInDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-in date" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label text="Check-out date:" GridPane.rowIndex="6" />
-            <DatePicker fx:id="checkOutDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-out date" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <DatePicker fx:id="checkInDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-in date" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Check-out date:" GridPane.rowIndex="2" />
+            <DatePicker fx:id="checkOutDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-out date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
                   <CheckBox fx:id="doubleCheckBox" mnemonicParsing="false" text="Double         " />
+                  <Label fx:id="priceOfDouble" text="150.00" />
                   <Label text="x" />
                   <TextField fx:id="doubleField" prefWidth="80.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
                   <CheckBox fx:id="deluxCheckBox" mnemonicParsing="false" text="Delux            " />
+                  <Label fx:id="priceOfDelux" text="200.00" />
                   <Label text="x" />
                   <TextField fx:id="deluxField" prefWidth="80.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <children>
                   <CheckBox fx:id="pentHouseCheckBox" mnemonicParsing="false" text="Pent House" />
+                  <Label fx:id="priceOfPentHouse" text="300.00" />
                   <Label text="x" />
                   <TextField fx:id="pentHouseField" prefWidth="80.0" />
                </children>
