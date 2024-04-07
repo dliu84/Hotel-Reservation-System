@@ -78,6 +78,8 @@ public class Main extends Application {
 	private static final String INST_QRY_ROOM_TYPES = "Insert into "+ DB_TABLE_ROOMTYPENAMES + " (roomTypeName) values (?)";
 	
 	private static final String INST_QRY_ROOMS = "INSERT INTO ROOMS (roomId, price, roomType) VALUES (?, ?, ?)";
+	
+	private static final String INST_QRY_LOGINS = "INSERT INTO " + DB_TABLE_LOGINS + " (id, password) VALUES (?, ?)";
 
 //	private static final String SELECT_QRY = "Select * from "+DB_TABLE_Guests+" where id = ?";
 	
@@ -110,6 +112,10 @@ public class Main extends Application {
 			}else {
 				System.out.println("Logins database is created!!!!!!!!!!!!!!");
 			}
+//			ps = conn.prepareStatement(INST_QRY_LOGINS);
+//			ps.setInt(1, 9527);
+//			ps.setString(2, "password");
+//			ps.executeUpdate();
 			
 			ps = conn.prepareStatement(CREATE_TBL_QRY_ROOM_TYPES);
 			boolean result4 = ps.execute();
