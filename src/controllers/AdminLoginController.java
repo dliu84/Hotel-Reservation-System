@@ -42,9 +42,11 @@ public class AdminLoginController implements Initializable{
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		if (login.isDbConnected()) {
-			isConnected.setText("database is connected");
+//			isConnected.setText("database is connected");
+			System.out.println("database.db is connected!!!!");
 		}else {
-			isConnected.setText("database is NOT connected");
+//			isConnected.setText("database is NOT connected");
+			System.out.println("database.db is not connected.");
 		}
 	}
 
@@ -73,7 +75,7 @@ public class AdminLoginController implements Initializable{
     		id = Integer.parseInt(idField.getText().trim());
     		password = passwordField.getText().trim();
     	}catch(NumberFormatException e){
-    		showAlert(Alert.AlertType.ERROR, "ERROR", "Please enter valid User Id and Password.");
+    		showAlert(Alert.AlertType.ERROR, "ERROR", "Please enter a valid integer for User Id, and valid text for Password.");
     		return;
     	} 
     	
@@ -81,25 +83,38 @@ public class AdminLoginController implements Initializable{
     	try {
 			if(login.isLoggedIn(id, password)) {
 				System.out.println("User id and password is correct.");
-				Stage primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		    	
-		    	AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/views/AdminMainMenu.fxml"));
 				
-		    	Scene scene = new Scene(root,366,334);
+//				Stage primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//		    	AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/views/AdminMainMenu.fxml"));
+//		    	Scene scene = new Scene(root,366,334);
+//				primaryStage.setScene(scene);
+//				primaryStage.show();
+				
+				((Node)event.getSource()).getScene().getWindow().hide();
+				Stage primaryStage = new Stage();
+				FXMLLoader loader = new FXMLLoader();
+				AnchorPane root = loader.load(getClass().getResource("/views/AdminMainMenu.fxml").openStream());
+				Scene scene = new Scene(root);
 				primaryStage.setScene(scene);
 				primaryStage.show();
 			}
 			else {
-				isConnected.setText("User Id and Password are not correct. Please enter valid User Id and Password.");
+//				isConnected.setText("User Id and Password are not correct. Please enter valid User Id and Password.");
+				showAlert(Alert.AlertType.ERROR, "ERROR", "User Id and Password are not found in database. Please enter valid User Id and Password.");
+	    		return;
 			}
 		} catch (NumberFormatException e) {
 			
-			isConnected.setText("User Id and Password are not correct. Please enter valid User Id and Password.");
+			//isConnected.setText("User Id and Password are not correct. Please enter valid User Id and Password.");
 			e.printStackTrace();
+			showAlert(Alert.AlertType.ERROR, "ERROR", "User Id and Password are not found in database. Please enter valid User Id and Password.");
+    		return;
 		} catch (SQLException e) {
 			
-			isConnected.setText("User Id and Password are not correct. Please enter valid User Id and Password.");
+			//isConnected.setText("User Id and Password are not correct. Please enter valid User Id and Password.");
 			e.printStackTrace();
+			showAlert(Alert.AlertType.ERROR, "ERROR", "User Id and Password are not found in database. Please enter valid User Id and Password.");
+    		return;
 		}
     	
 //    	Stage primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
