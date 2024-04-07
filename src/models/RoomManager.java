@@ -64,24 +64,44 @@ public class RoomManager {
 	    rooms.add(new Room(3, 100.00, RoomTypeName.SINGLE));
 	    rooms.add(new Room(4, 100.00, RoomTypeName.SINGLE));
 	    rooms.add(new Room(5, 100.00, RoomTypeName.SINGLE));
+	    rooms.add(new Room(6, 100.00, RoomTypeName.SINGLE));
+	    rooms.add(new Room(7, 100.00, RoomTypeName.SINGLE));
+	    rooms.add(new Room(8, 100.00, RoomTypeName.SINGLE));
+	    rooms.add(new Room(9, 100.00, RoomTypeName.SINGLE));
+	    rooms.add(new Room(10, 100.00, RoomTypeName.SINGLE));
 	    
-	    rooms.add(new Room(6, 150.00, RoomTypeName.DOUBLE));
-	    rooms.add(new Room(7, 150.00, RoomTypeName.DOUBLE));
-	    rooms.add(new Room(8, 150.00, RoomTypeName.DOUBLE));
-	    rooms.add(new Room(9, 150.00, RoomTypeName.DOUBLE));
-	    rooms.add(new Room(10, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(11, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(12, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(13, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(14, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(15, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(16, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(17, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(18, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(19, 150.00, RoomTypeName.DOUBLE));
+	    rooms.add(new Room(20, 150.00, RoomTypeName.DOUBLE));
 	    
-	    rooms.add(new Room(11, 200.00, RoomTypeName.DELUX));
-	    rooms.add(new Room(12, 200.00, RoomTypeName.DELUX));
-	    rooms.add(new Room(13, 200.00, RoomTypeName.DELUX));
-	    rooms.add(new Room(14, 200.00, RoomTypeName.DELUX));
-	    rooms.add(new Room(15, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(21, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(22, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(23, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(24, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(25, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(26, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(27, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(28, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(29, 200.00, RoomTypeName.DELUX));
+	    rooms.add(new Room(30, 200.00, RoomTypeName.DELUX));
 	    
-	    rooms.add(new Room(16, 300.00, RoomTypeName.PENTHOUSE));
-	    rooms.add(new Room(17, 300.00, RoomTypeName.PENTHOUSE));
-	    rooms.add(new Room(18, 300.00, RoomTypeName.PENTHOUSE));
-	    rooms.add(new Room(19, 300.00, RoomTypeName.PENTHOUSE));
-	    rooms.add(new Room(20, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(31, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(32, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(33, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(34, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(35, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(36, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(37, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(38, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(39, 300.00, RoomTypeName.PENTHOUSE));
+	    rooms.add(new Room(40, 300.00, RoomTypeName.PENTHOUSE));
 
         return rooms;
     }

@@ -21,7 +21,7 @@ import javafx.fxml.FXMLLoader;
 
 public class Main extends Application {
 	
-	private static final String DB_JDBC = "jdbc:sqlite:";
+	/*private static final String DB_JDBC = "jdbc:sqlite:";
 	private static final String DB_CONNECTION = "/Users/mayflower/Documents/APD545/practice/Project_HotelReservationSystem/src/";
 	private static final String DB_NAME = "database.db";
 	
@@ -59,7 +59,6 @@ public class Main extends Application {
 	        "price DOUBLE, " +
 	        "roomType VARCHAR(20))";
 	
-	// Reservation table creation query
 	private static final String CREATE_TBL_QRY_RESERVATIONS = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_RESERVATIONS +
 	        " (bookID INTEGER PRIMARY KEY AUTOINCREMENT, " +
 	        "bookDate DATE, " +
@@ -68,7 +67,6 @@ public class Main extends Application {
 	        "guestID INTEGER, " +
 	        "billID INTEGER)";
 
-	// Table to represent the relationship between reservations and rooms
 	private static final String CREATE_TBL_QRY_RESERVATION_ROOMS = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_RESERVATIONROOMS +
 	        " (reservationID INTEGER, " +
 	        "roomID INTEGER, " +
@@ -163,8 +161,24 @@ public class Main extends Application {
 			
 			WelcomePageController webcomePageController = loader.getController();
 			
-			Scene scene = new Scene(root,500,300);
+			Scene scene = new Scene(root);
 			
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}*/
+	
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/WelcomePage.fxml"));
+            AnchorPane root = (AnchorPane) loader.load();
+            
+			Scene scene = new Scene(root,500,300);
+
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
