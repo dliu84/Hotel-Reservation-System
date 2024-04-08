@@ -1,19 +1,24 @@
 package controllers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Room;
 import models.RoomManager;
 
-public class WelcomePageController {
+public class WelcomePageController implements Initializable {
 
     @FXML
     private Button admin;
@@ -29,22 +34,24 @@ public class WelcomePageController {
 //        System.out.println("number of rooms in WelcomePage is: " + rooms.size());
 //    }
     
-    @FXML
-    public void initialize() {
-    	RoomManager roomManager = RoomManager.getInstance();
-        rooms = roomManager.getRooms();
-        System.out.println("number of rooms in WelcomePage is: " + rooms.size());
-    	
-    }
+//    @FXML
+//    public void initialize() {
+//    	RoomManager roomManager = RoomManager.getInstance();
+//        rooms = roomManager.getRooms();
+//        System.out.println("number of rooms in WelcomePage is: " + rooms.size());
+//    	
+//    }
 
     @FXML
     void handleAdmin(ActionEvent event) {
     	try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminLogin.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) admin.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+    		((Node)event.getSource()).getScene().getWindow().hide();
+   			Stage primaryStage = new Stage();
+   			FXMLLoader loader = new FXMLLoader();
+   			AnchorPane root = loader.load(getClass().getResource("/views/AdminLogin.fxml").openStream());
+   			Scene scene = new Scene(root);
+   			primaryStage.setScene(scene);
+   			primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,17 +60,21 @@ public class WelcomePageController {
     @FXML
     void handleGuest(ActionEvent event) {
     	try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GuestBookRoom.fxml"));
-            Parent root = loader.load();
-            
-            GuestBookRoomController guestBookRoomController = loader.getController();
-           // guestBookRoomController.setRooms(rooms);
-            
-            Stage stage = (Stage) guest.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+    		((Node)event.getSource()).getScene().getWindow().hide();
+   			Stage primaryStage = new Stage();
+   			FXMLLoader loader = new FXMLLoader();
+   			AnchorPane root = loader.load(getClass().getResource("/views/GuestBookRoom.fxml").openStream());
+   			Scene scene = new Scene(root);
+   			primaryStage.setScene(scene);
+   			primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
+		
+	}
 }

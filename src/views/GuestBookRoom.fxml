@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="690.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GuestBookRoomController">
+<AnchorPane prefHeight="781.0" prefWidth="628.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GuestBookRoomController">
    <children>
       <Label layoutX="21.0" layoutY="22.0" text="Hotel Reservation System">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <GridPane layoutX="18.0" layoutY="149.0" prefHeight="454.0" prefWidth="544.0">
+      <GridPane layoutX="18.0" layoutY="112.0" prefHeight="290.0" prefWidth="555.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="228.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="327.0" />
@@ -35,10 +35,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="No of guests:" GridPane.rowIndex="2" />
+            <Label text="No of guests:" />
             <Label text="Choose the room type and enter the number of rooms you need:" wrapText="true" GridPane.rowIndex="3" />
-            <Label text="Check-in date:" />
-            <TextField fx:id="noOfGuestField" maxWidth="-Infinity" prefWidth="160.0" promptText="How many guests?" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Check-in date:" GridPane.rowIndex="1" />
+            <TextField fx:id="noOfGuestField" maxWidth="-Infinity" prefWidth="160.0" promptText="How many guests?" GridPane.columnIndex="1" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <CheckBox fx:id="singleCheckBox" mnemonicParsing="false" text="Single            " />
@@ -47,9 +47,9 @@
                   <TextField fx:id="singleField" prefWidth="80.0" />
                </children>
             </HBox>
-            <DatePicker fx:id="checkInDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-in date" GridPane.columnIndex="1" />
-            <Label text="Check-out date:" GridPane.rowIndex="1" />
-            <DatePicker fx:id="checkOutDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-out date" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <DatePicker fx:id="checkInDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-in date" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Check-out date:" GridPane.rowIndex="2" />
+            <DatePicker fx:id="checkOutDate" maxWidth="-Infinity" prefWidth="160.0" promptText="Select check-out date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
                   <CheckBox fx:id="doubleCheckBox" mnemonicParsing="false" text="Double         " />
@@ -66,7 +66,7 @@
                   <TextField fx:id="deluxField" prefWidth="80.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <HBox alignment="CENTER" prefHeight="68.0" prefWidth="327.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <children>
                   <CheckBox fx:id="pentHouseCheckBox" mnemonicParsing="false" text="Pent House" />
                   <Label fx:id="priceOfPentHouse" text="300.00" />
@@ -83,8 +83,37 @@
             <Label text="available rooms in the system." />
          </children>
       </HBox>
-      <Separator layoutX="74.0" layoutY="120.0" prefHeight="17.0" prefWidth="435.0" />
-      <Button fx:id="addGuestInfoButton" layoutX="299.0" layoutY="626.0" mnemonicParsing="false" onAction="#handleAddGuestInfo" text="Add Guest Info" />
-      <Button fx:id="cancelButton" layoutX="430.0" layoutY="626.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+      <Button layoutX="344.0" layoutY="735.0" mnemonicParsing="false" onAction="#handleBook" text="Book" />
+      <Button fx:id="cancelButton" layoutX="466.0" layoutY="735.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+      <Separator layoutX="87.0" layoutY="412.0" prefHeight="17.0" prefWidth="435.0" />
+      <GridPane layoutX="22.0" layoutY="482.0" prefHeight="223.0" prefWidth="586.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="218.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="369.0" minWidth="10.0" prefWidth="337.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Title:" />
+            <Label text="First Name:" GridPane.rowIndex="1" />
+            <Label text="Last Name:" GridPane.rowIndex="2" />
+            <Label text="Address:" GridPane.rowIndex="3" />
+            <Label text="Phone:" GridPane.rowIndex="4" />
+            <TextField fx:id="titleField" promptText="Enter your title (e.g., Mr., Mrs., Ms., Miss)" GridPane.columnIndex="1" />
+            <TextField fx:id="firstNameField" promptText="Enter your first name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="addressField" promptText="Enter your address" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="phoneField" promptText="Enter your phone number" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Email:" GridPane.rowIndex="5" />
+            <TextField fx:id="emailField" prefHeight="56.0" prefWidth="352.0" promptText="Enter your email address" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="lastNameField" promptText="Enter your last name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <Label layoutX="356.0" layoutY="447.0" prefHeight="17.0" prefWidth="110.0" text="Guest Inforamtion" />
    </children>
 </AnchorPane>

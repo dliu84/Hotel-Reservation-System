@@ -32,11 +32,13 @@ public class AdminMainMenuController {
     @FXML
     void handleAvailableRooms(ActionEvent event) {
     	 try {
-             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminAvailableRooms.fxml"));
-             Parent root = loader.load();
-             Stage stage = new Stage();
-             stage.setScene(new Scene(root));
-             stage.show();
+    		((Node)event.getSource()).getScene().getWindow().hide();
+   			Stage primaryStage = new Stage();
+   			FXMLLoader loader = new FXMLLoader();
+   			AnchorPane root = loader.load(getClass().getResource("/views/AdminAvailableRooms.fxml").openStream());
+   			Scene scene = new Scene(root);
+   			primaryStage.setScene(scene);
+   			primaryStage.show();
          } catch (IOException e) {
              e.printStackTrace();
              // Handle exception gracefully
@@ -46,11 +48,13 @@ public class AdminMainMenuController {
     @FXML
     void handleBillService(ActionEvent event) {
     	 try {
-             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminBillService.fxml"));
-             Parent root = loader.load();
-             Stage stage = new Stage();
-             stage.setScene(new Scene(root));
-             stage.show();
+    		((Node)event.getSource()).getScene().getWindow().hide();
+  			Stage primaryStage = new Stage();
+  			FXMLLoader loader = new FXMLLoader();
+  			AnchorPane root = loader.load(getClass().getResource("/views/AdminBillService.fxml").openStream());
+  			Scene scene = new Scene(root);
+  			primaryStage.setScene(scene);
+  			primaryStage.show();
          } catch (IOException e) {
              e.printStackTrace();
              // Handle exception gracefully
@@ -60,11 +64,13 @@ public class AdminMainMenuController {
     @FXML
     void handleBookRoom(ActionEvent event) throws IOException {
     	 try {
-             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminBookRoom.fxml"));
-             Parent root = loader.load();
-             Stage stage = new Stage();
-             stage.setScene(new Scene(root));
-             stage.show();
+    		((Node)event.getSource()).getScene().getWindow().hide();
+ 			Stage primaryStage = new Stage();
+ 			FXMLLoader loader = new FXMLLoader();
+ 			AnchorPane root = loader.load(getClass().getResource("/views/AdminBookRoom.fxml").openStream());
+ 			Scene scene = new Scene(root);
+ 			primaryStage.setScene(scene);
+ 			primaryStage.show();
          } catch (IOException e) {
              e.printStackTrace();
              // Handle exception gracefully
@@ -74,11 +80,18 @@ public class AdminMainMenuController {
     @FXML
     void handleCurrBookings(ActionEvent event) {
     	 try {
-             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminCurrentBookings.fxml"));
-             Parent root = loader.load();
-             Stage stage = new Stage();
-             stage.setScene(new Scene(root));
-             stage.show();
+//             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminCurrentBookings.fxml"));
+//             Parent root = loader.load();
+//             Stage stage = new Stage();
+//             stage.setScene(new Scene(root));
+//             stage.show();
+    		 	((Node)event.getSource()).getScene().getWindow().hide();
+    			Stage primaryStage = new Stage();
+    			FXMLLoader loader = new FXMLLoader();
+    			AnchorPane root = loader.load(getClass().getResource("/views/AdminCurrentBookings.fxml").openStream());
+    			Scene scene = new Scene(root);
+    			primaryStage.setScene(scene);
+    			primaryStage.show();
          } catch (IOException e) {
              e.printStackTrace();
              // Handle exception gracefully
@@ -101,5 +114,4 @@ public class AdminMainMenuController {
 		primaryStage.setScene(scene);
 		primaryStage.show();
     }
-
 }
