@@ -11,8 +11,12 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import javax.security.auth.callback.Callback;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -137,7 +142,8 @@ public class AdminBookRoomController implements Initializable{
     	
     	PreparedStatement ps = null;
         ResultSet resultSet = null;
-        String query = "SELECT COUNT(*) AS room_count FROM Rooms";
+        //String query = "SELECT COUNT(*) AS room_count FROM Rooms";
+        String query = "SELECT COUNT(*) AS room_count FROM Rooms WHERE available = 1";
 
         try {
             ps = conn.prepareStatement(query);
@@ -157,7 +163,6 @@ public class AdminBookRoomController implements Initializable{
                 e.printStackTrace();
             }
         }
-        
         
 		 checkInDate.valueProperty().addListener((observable, oldValue, newValue) -> {
 			
@@ -226,20 +231,15 @@ public class AdminBookRoomController implements Initializable{
                  titleField.setStyle(""); 
              }
         });
-        
-       
- 		
- 		
+        		
      	discountSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
  			@Override
  			public void changed(ObservableValue<? extends Number> slider, Number oldValue, Number newValue) {
- 				
- 				
+ 								
  				discount = newValue.intValue();
  			}		
- 		});	
-		
+ 		});		
 	}
     
     private boolean isValidEmail(String email) {
@@ -259,7 +259,7 @@ public class AdminBookRoomController implements Initializable{
 
     private boolean isValidPhoneNumber(String phoneNumber) {
         // Basic phone number validation (digits only)
-        return phoneNumber.matches("\\d+");
+    	return phoneNumber.matches("\\d{10}");
     }
     
     private boolean isValidTitle(String title) {
@@ -301,15 +301,11 @@ public class AdminBookRoomController implements Initializable{
 			} else {
 				showAlert(Alert.AlertType.ERROR, "Error", "Please select check in and check out dates.");
 	    		return;
-			}
-		 
+			}	 
 		 
 		 days = ChronoUnit.DAYS.between(checkInDateValue, checkOutDateValue);
 		 System.out.println("the days are: " + days);
-		 
-		 
-		
-		 
+		 		 
 		 if (singleCheckBox.isSelected()) {
 			 try {
 			        noOfSingle = Integer.parseInt(singleField.getText().trim());
@@ -328,6 +324,9 @@ public class AdminBookRoomController implements Initializable{
 
 			        // Add the retrieved SINGLE rooms to the bookedRooms list
 			        bookedRooms.addAll(singleRooms);
+			        
+			     // Update the availability of SINGLE rooms in the Rooms table
+			        updateRoomAvailability(singleRooms);
 			        
 			        amount += Double.parseDouble(priceOfSingle.getText().trim()) * noOfSingle;
 			        
@@ -357,6 +356,9 @@ public class AdminBookRoomController implements Initializable{
 
 			        // Add the retrieved SINGLE rooms to the bookedRooms list
 			        bookedRooms.addAll(doubleRooms);
+			        
+			     // Update the availability of SINGLE rooms in the Rooms table
+			        updateRoomAvailability(doubleRooms);
 
 			        amount += Double.parseDouble(priceOfDouble.getText().trim()) * noOfDouble;
 				 
@@ -384,6 +386,9 @@ public class AdminBookRoomController implements Initializable{
 
 		        // Add the retrieved SINGLE rooms to the bookedRooms list
 		        bookedRooms.addAll(deluxRooms);
+		        
+		     // Update the availability of SINGLE rooms in the Rooms table
+		        updateRoomAvailability(deluxRooms);
 
 				 amount += Double.parseDouble(priceOfDelux.getText().trim()) * noOfDelux;
 				 
@@ -412,6 +417,9 @@ public class AdminBookRoomController implements Initializable{
 
 		        // Add the retrieved SINGLE rooms to the bookedRooms list
 		        bookedRooms.addAll(pentHouseRooms);
+		        
+		     // Update the availability of SINGLE rooms in the Rooms table
+		        updateRoomAvailability(pentHouseRooms);
 
 				 amount += Double.parseDouble(priceOfPentHouse.getText().trim()) * noOfPentHouse;
 				 
@@ -547,9 +555,7 @@ public class AdminBookRoomController implements Initializable{
     	        // Handle the case where the auto-generated key was not retrieved
     	        throw new SQLException("Failed to retrieve auto-generated bill ID.");
     	    }
-    	    
-    	    
-    	    
+    	        	    
     	    // Insert reservation into Reservations table (including guestID and billID)
             PreparedStatement psReservation = conn.prepareStatement("INSERT INTO Reservations (bookDate, checkInDate, checkOutDate, guestID, billID) VALUES (?, ?, ?, ?, ?)");
             psReservation.setDate(1, new java.sql.Date(System.currentTimeMillis())); 
@@ -577,212 +583,36 @@ public class AdminBookRoomController implements Initializable{
                 ps.executeUpdate();
                 ps.close();
             }
+            
+            if ((noOfSingle + noOfDouble + noOfDelux + noOfPentHouse) >= (noOfGuest % 2 == 0 ? noOfGuest % 2 : noOfGuest / 2 + 1)) {
+   			 
+   			 Reservation reservation = new Reservation(
+   	                    new Date(), // Book date (current date)
+   	                    java.sql.Date.valueOf(checkInDateValue), // Check-in date
+   	                    java.sql.Date.valueOf(checkOutDateValue), // Check-out date
+   	                    guest, // Guest object (to be filled later)
+   	                    bookedRooms, // Room object
+   	                    bill // Bill object
+   	            );
+   			 
+   			showAlertWithRoomTypes(Alert.AlertType.INFORMATION, "ABC Hotel reservation inforamtion", reservation, bookedRooms);
+   			 
+   			 System.out.println("the booking room infor is: " + "\n" + reservation.getBookID() + "\n" +
+   					 reservation.getBookDate() + "\n" +
+   					 reservation.getCheckInDate() + "\n" + 
+   					 reservation.getCheckOutDate() + "\n" +
+   					 reservation.getRooms() + "\n" +
+   					 reservation.getBill().getAmount());
+   		 }
+   		 else {
+   			 showAlert(Alert.AlertType.ERROR, "Error", "One room can only server less than 2 guests. Please select room type and enter the number of rooms.");
+	    		return;
+   		 }  
     		
     	} catch (SQLException e) {
     	    e.printStackTrace();
     	    // Handle any SQL exceptions here
-    	}
-    	
-    	
-    }
-    
-    @FXML
-    void handleAddGuestInfo(ActionEvent event) throws IOException {
-//    	 try {
-//             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GuestInfo.fxml"));
-//             Parent root = loader.load();
-//             Stage stage = new Stage();
-//             stage.setScene(new Scene(root));
-//             stage.show();
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//             // Handle exception gracefully
-//         }
-    	 try {
-    		 int noOfGuest = 0;
-    		 int noOfSingle = 0;
-    		 int noOfDouble = 0;
-    		 int noOfDelux = 0;
-    		 int noOfPentHouse = 0;
-    		 double amount = 0;
-    		 Bill bill;
-    		 
-    		 
-    		 try {
-    		 checkInDateValue = checkInDate.getValue();
-    		 checkOutDateValue = checkOutDate.getValue();
-    		 
-    		 }catch(NumberFormatException e){
- 	    		showAlert(Alert.AlertType.ERROR, "Error", "Please select check in / out date.");
- 	    		return;
- 	    	}
-    		 
-    		
-    		 if (checkInDate.getValue() != null && checkOutDate.getValue() != null) {
-    			    days = ChronoUnit.DAYS.between(checkInDateValue, checkOutDateValue);
-    			    
-    			} else {
-    				showAlert(Alert.AlertType.ERROR, "Error", "Please select check in and check out dates.");
-    	    		return;
-    			}
-    		 
-    		 
-    		 days = ChronoUnit.DAYS.between(checkInDateValue, checkOutDateValue);
-    		 System.out.println("the days are: " + days);
-    		 
-    		 
-    		 try{
-    			 noOfGuest = Integer.parseInt(noOfGuestField.getText().trim());
-    			 
-    		 }catch (NumberFormatException e){
-    	    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
-    	    		return;
-    	    	}
-    		 
-    		 if (singleCheckBox.isSelected()) {
-    			 try {
-    				 noOfSingle = Integer.parseInt(singleField.getText().trim());
-    				 int counter = 0;
-    				 for (int i = 0; i < rooms.size(); i++) {
-    					 for (Room room : rooms) {
-    						 if (room.getRoomType() == RoomTypeName.SINGLE && counter < noOfSingle) {
-    							 bookedRooms.add(room);
-    							 counter++;
-    						 }
-    					 }
-    				 }
-    				 
-    				 amount += Double.parseDouble(priceOfSingle.getText().trim()) * noOfSingle;
-    				 
-    			 }catch (NumberFormatException e){
-     	    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
-     	    		return;
-     	    	}
-    		 }
-    		 if (doubleCheckBox.isSelected()) {
-    			 try {
-    				 noOfDouble = Integer.parseInt(doubleField.getText().trim());
-    				 int counter = 0;
-    				 for (int i = 0; i < rooms.size(); i++) {
-    					 for (Room room : rooms) {
-    						 if (room.getRoomType() == RoomTypeName.DOUBLE  && counter < noOfDouble) {
-    							 bookedRooms.add(room);
-    							 counter++;
-    						 }
-    					 }
-    				 }
-
-    				 amount += Double.parseDouble(priceOfDouble.getText().trim()) * noOfDouble;
-    				 
-    			 }catch (NumberFormatException e){
-     	    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
-     	    		return;
-     	    	}
-    		 }
-    		 if (deluxCheckBox.isSelected()) {
-    			 try {
-    				 noOfDelux = Integer.parseInt(deluxField.getText().trim());
-    				 int counter = 0;
-    				 for (int i = 0; i < rooms.size(); i++) {
-    					 for (Room room : rooms) {
-    						 if (room.getRoomType() == RoomTypeName.DELUX && counter < noOfDelux) {
-    							 bookedRooms.add(room);
-    							 counter++;
-    						 }
-    					 }
-    				 }
-
-    				 amount += Double.parseDouble(priceOfDelux.getText().trim()) * noOfDelux;
-    				 
-    			 }catch (NumberFormatException e){
-      	    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
-      	    		return;
-      	    	}
-    		 }
-    		 if (pentHouseCheckBox.isSelected()) {
-    			 try {
-    				 noOfPentHouse = Integer.parseInt(pentHouseField.getText().trim());
-    				 int counter = 0;
-    				 for (int i = 0; i < rooms.size(); i++) {
-    					 for (Room room : rooms) {
-    						 if (room.getRoomType() == RoomTypeName.PENTHOUSE && counter < noOfPentHouse) {
-    							 bookedRooms.add(room);
-    							 counter++;
-    						 }
-    					 }
-    				 }
-
-    				 amount += Double.parseDouble(priceOfPentHouse.getText().trim()) * noOfPentHouse;
-    				 
-    			 }catch (NumberFormatException e){
-       	    		showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
-       	    		return;
-       	    	}
-    		 }
-    		 
-    		 if (!singleCheckBox.isSelected() && !doubleCheckBox.isSelected() && !deluxCheckBox.isSelected() && !pentHouseCheckBox.isSelected()) {
-    			 showAlert(Alert.AlertType.ERROR, "Error", "Please select room type and enter number of rooms.");
-    	    		return;
-    		 }
-    		
-    		 originalTotal = amount * days;
-    		 
-    		 bill = new Bill(amount * days * (100 - discount) / 100);
-    		 
-    		 System.out.println("the days are: " + days + "\n");
-    		 System.out.println("the bill is: " + bill.getAmount());
-    		 System.out.println("the discount is: " + discount + "%");
-    		 
-    		 
-    		 
-    		 
-    		 if ((noOfSingle + noOfDouble + noOfDelux + noOfPentHouse) >= (noOfGuest % 2 == 0 ? noOfGuest % 2 : noOfGuest / 2 + 1)) {
-    			 
-    			 Reservation reservation = new Reservation(
-    	                    new Date(), // Book date (current date)
-    	                    java.sql.Date.valueOf(checkInDateValue), // Check-in date
-    	                    java.sql.Date.valueOf(checkOutDateValue), // Check-out date
-    	                    null, // Guest object (to be filled later)
-    	                    bookedRooms, // Room object
-    	                    bill // Bill object
-    	            );
-    			 
-    			 System.out.println("the booking room infor is: " + "\n" + reservation.getBookID() + "\n" +
-    					 reservation.getBookDate() + "\n" +
-    					 reservation.getCheckInDate() + "\n" + 
-    					 reservation.getCheckOutDate() + "\n" +
-    					 reservation.getRooms() + "\n" +
-    					 reservation.getBill().getAmount());
-    			 
-//    			 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GuestInfo.fxml"));
-//                 Parent root = loader.load();
-//                 
-//                 GuestInfoController controller = loader.getController();
-//                 controller.initData(reservation);
-//                 
-//                 Stage stage = new Stage();
-//                 stage.setScene(new Scene(root));
-//                 stage.show();
-    			 
-    			 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminBookRoomGuestInfo.fxml"));
-                 Parent root = loader.load();
-                 
-                 AdminBookRoomGuestInfoController controller = loader.getController();
-                 controller.initData(reservation, discount, originalTotal);
-                 
-                 Stage stage = new Stage();
-                 stage.setScene(new Scene(root));
-                 stage.show();
-    		 }
-    		 else {
-    			 showAlert(Alert.AlertType.ERROR, "Error", "One room can only server less than 2 guests. Please select room type and enter the number of rooms.");
- 	    		return;
-    		 }            
-            
-         } catch (IOException e) {
-             e.printStackTrace();
-             // Handle exception gracefully
-         }
+    	}  	
     }
 
     @FXML
@@ -818,7 +648,7 @@ public class AdminBookRoomController implements Initializable{
         List<Room> rooms = new ArrayList<>();
 
         // SQL query to retrieve rooms of a specific type from the database
-        String query = "SELECT * FROM Rooms WHERE roomType = ? LIMIT ?";
+        String query = "SELECT * FROM Rooms WHERE roomType = ? AND available = 1 LIMIT ?";
 
         try (
             Connection connection = SqliteConnection.Connector();
@@ -848,6 +678,57 @@ public class AdminBookRoomController implements Initializable{
 
         return rooms;
     }
-	
+    
+    public void updateRoomAvailability(List<Room> rooms) {
+        // SQL query to update the availability of rooms in the Rooms table
+        String query = "UPDATE Rooms SET available = 0 WHERE roomID = ?";
+
+        try (
+            Connection connection = SqliteConnection.Connector();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ) {
+            for (Room room : rooms) {
+                preparedStatement.setInt(1, room.getRoomID());
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any SQL exceptions here
+        }
+    }
+
+    public void showAlertWithRoomTypes(Alert.AlertType alertType, String title, Reservation reservation, List<Room> bookedRooms) {
+    	
+      	   Map<RoomTypeName, Integer> roomTypeCount = new HashMap<>();
+           Map<RoomTypeName, Double> roomTypePrice = new HashMap<>();
+
+           // Count occurrences of each room type and store their prices
+           for (Room room : bookedRooms) {
+               RoomTypeName roomType = room.getRoomType();
+               roomTypeCount.put(roomType, roomTypeCount.getOrDefault(roomType, 0) + 1);
+               roomTypePrice.put(roomType, room.getPrice());
+           }
+
+           StringBuilder roomTypesInfo = new StringBuilder();
+           for (Map.Entry<RoomTypeName, Integer> entry : roomTypeCount.entrySet()) {
+               RoomTypeName roomType = entry.getKey();
+               int count = entry.getValue();
+               double price = roomTypePrice.get(roomType);
+               roomTypesInfo.append(roomType).append(": ").append(count).append(" room(s) - $").append(price).append(" per room\n");
+           }
+      	
+          showAlert(alertType, title,
+                  "Congratulations!\n\n" +
+                  "Your booking info with ABC Hotel is as following:\n\n" +
+                  "Name of the guest: " + reservation.getGuest().getTitle() + " " + 
+                  reservation.getGuest().getFirstName() + " " + reservation.getGuest().getLastName() + "\n\n" +
+                  "Check in date: " + reservation.getCheckInDate() + "\n" +
+                  "Check out date: " + reservation.getCheckOutDate() + "\n" + "\n" +
+                  "Rooms:\n" +
+                  roomTypesInfo.toString() + "\n" +
+                  "The total amount is: $" + reservation.getBill().getAmount() + "\n\n" + 
+                  "We have sent a copy of reservation to your email address " + reservation.getGuest().getEmail() + "\n\n" +
+                  "Thank you for booking with ABC Hotel!");                 
+      }
 }
 
