@@ -176,8 +176,6 @@ public class AdminBookRoomController implements Initializable{
 	        System.out.println("Check-out date changed: " + newValue); 
 	    });
 	    
-
-  
         emailField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!isValidEmail(newValue)) {
                 
@@ -259,7 +257,7 @@ public class AdminBookRoomController implements Initializable{
 
     private boolean isValidPhoneNumber(String phoneNumber) {
         // Basic phone number validation (digits only)
-    	return phoneNumber.matches("\\d{10}");
+    	return phoneNumber.matches("\\d+");
     }
     
     private boolean isValidTitle(String title) {
@@ -727,6 +725,7 @@ public class AdminBookRoomController implements Initializable{
                   "Rooms:\n" +
                   roomTypesInfo.toString() + "\n" +
                   "The total amount is: $" + reservation.getBill().getAmount() + "\n\n" + 
+                  "With " +  discount + "%" + " discount" + "\n\n" +
                   "We have sent a copy of reservation to your email address " + reservation.getGuest().getEmail() + "\n\n" +
                   "Thank you for booking with ABC Hotel!");                 
       }
