@@ -22,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -85,6 +86,11 @@ public class AdminCurrentBookingsController implements Initializable {
     		System.out.println("Connection is successful in current booking controllerr!!!");
     	}
     	
+    	loadCurrentBookings();
+    }
+    
+    public void loadCurrentBookings() {
+    	
     	PreparedStatement ps = null;
         ResultSet resultSet = null;
         String query = "SELECT COUNT(*) AS reservation_count FROM Reservations";
@@ -116,8 +122,8 @@ public class AdminCurrentBookingsController implements Initializable {
             	 
             	 double amount = fetchBillAmount(conn, billID);
             	             	 
-                 System.out.println("Booking No: " + bookID + " guest name: " + guestName + " amount: " + amount + " days: " + 
-                		 (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24) + "\n\n");
+//                 System.out.println("Booking No: " + bookID + " guest name: " + guestName + " amount: " + amount + " days: " + 
+//                		 (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24) + "\n\n");
                  
                  long diffInMillies = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
                  int days = (int) TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
@@ -126,13 +132,11 @@ public class AdminCurrentBookingsController implements Initializable {
                  bookingNoColumn.setCellValueFactory(new PropertyValueFactory<>("bookID"));
                  nameColumn.setCellValueFactory(new PropertyValueFactory<>("guestName"));
                  amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-                 noOfDaysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
-                
-
+                 noOfDaysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));   
+                 
                  bookings.add(new CurrentBooking(bookID, guestName, amount, days));
              }              
-            
-            
+                       
             currentBookingsTable.setItems(bookings);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,8 +166,112 @@ public class AdminCurrentBookingsController implements Initializable {
 
     @FXML
     void handleDelete(ActionEvent event) {
+        CurrentBooking selectedBooking = currentBookingsTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedBooking == null) {
+            showAlert(Alert.AlertType.ERROR, "ERROR", "Please select at least one booking to delete.");
+            return;
+        }
 
+        try {
+        	// 1. delete bill
+            int billID = getBillID(selectedBooking.getBookID());
+
+            // Delete the related row in the Bills table if the status is "outstanding"
+            String status = getBillStatus(billID);
+            if (status.equals("outstanding")) {
+                deleteBill(billID);
+            }
+            
+            // 2. change available in Rooms
+            // Set the status of the room to "1" in the Rooms table
+            setRoomStatus(selectedBooking.getBookID(), 1);
+            
+            // 3. delete ReservationRooms
+            
+            // Delete the related row in the ReservationRooms table
+            deleteReservationRoom(selectedBooking.getBookID());
+        	
+            // 4. finally delete reservation
+            // Delete the reservation from the Reservations table
+            deleteReservation(selectedBooking.getBookID());     
+            
+            showAlert(Alert.AlertType.CONFIRMATION, "Success", "Successfully deleted seleted booking in database!");
+
+            currentBookingsTable.getItems().clear(); 
+            loadCurrentBookings(); 
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "ERROR", "Error happened when deleting booking.");
+        }
     }
+
+    // Method to delete the reservation from the Reservations table
+    private void deleteReservation(int bookID) throws SQLException {
+        String query = "DELETE FROM Reservations WHERE bookID = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, bookID);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    // Method to retrieve the billID of a reservation from the Reservations table
+    private int getBillID(int bookID) throws SQLException {
+        int billID = 0;
+        String query = "SELECT billID FROM Reservations WHERE bookID = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, bookID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                billID = resultSet.getInt("billID");
+            }
+        }
+        return billID;
+    }
+
+    // Method to retrieve the status of a bill from the Bills table
+    private String getBillStatus(int billID) throws SQLException {
+        String status = "";
+        String query = "SELECT status FROM Bills WHERE billID = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, billID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                status = resultSet.getString("status");
+            }
+        }
+        return status;
+    }
+
+    // Method to delete the bill from the Bills table
+    private void deleteBill(int billID) throws SQLException {
+        String query = "DELETE FROM Bills WHERE billID = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, billID);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    // Method to delete the reservation room from the ReservationRooms table
+    private void deleteReservationRoom(int bookID) throws SQLException {
+        String query = "DELETE FROM ReservationRooms WHERE reservationID = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, bookID);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    // Method to set the status of the room in the Rooms table
+    private void setRoomStatus(int bookID, int available) throws SQLException {
+        String query = "UPDATE Rooms SET available = ? WHERE roomID IN (SELECT roomID FROM ReservationRooms WHERE reservationID = ?)";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, available);
+            preparedStatement.setInt(2, bookID);
+            preparedStatement.executeUpdate();
+        }
+    }
+
     
     public double fetchBillAmount(Connection connection, int billID) throws SQLException {
    	    double amount = 0;
@@ -227,6 +335,15 @@ public class AdminCurrentBookingsController implements Initializable {
   	    
   	    return rooms;
   	}
+    
+    // helper function to show the Alert on the screen
+    public void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }
 
 
