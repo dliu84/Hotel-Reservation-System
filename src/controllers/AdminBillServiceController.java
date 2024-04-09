@@ -5,9 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -25,15 +29,23 @@ import models.SqliteConnection;
 
 public class AdminBillServiceController {
 
-   @FXML
+	@FXML
     private TextField bookingIdField;
 
     @FXML
-    private TextField phoneField;
-    
-    @FXML
     private Button cancelButton;
 
+    @FXML
+    private TextField phoneField;
+
+    @FXML
+    private TextArea textArea;
+
+    List<Integer> roomIDs = new ArrayList<>();
+	List<Room> rooms = new ArrayList<>();
+	int billID;	
+	String guestName;
+	
     @FXML
     void handleCancel(ActionEvent event) throws IOException {
     	Stage primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -84,7 +96,22 @@ public class AdminBillServiceController {
                  Date checkInDate = resultSet.getDate("checkInDate");
                  Date checkOutDate = resultSet.getDate("checkOutDate");
                  int guestID = resultSet.getInt("guestID");
-                 int billID = resultSet.getInt("billID");
+                 billID = resultSet.getInt("billID");
+                 String billStatus = "";
+                 int totalRooms = 0; 
+                 
+                 String queryBillStatus = "SELECT * FROM Bills where billID = ?";
+                 try (/*Connection conn = SqliteConnection.Connector();*/
+                         PreparedStatement ps = connection.prepareStatement(queryBillStatus)) {
+                	 ps.setInt(1,  billID);
+                	 ResultSet rs = ps.executeQuery();
+                	 while(rs.next()) {
+                		 billStatus = rs.getString("status");
+                	 }                		                 	 
+                 }catch (SQLException e) {
+                     e.printStackTrace();
+                     showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while searching for bookings.");
+                 }
                  
                  System.out.println("The booking id is: " + bookID);
                  System.out.println("The check in date is: " + checkInDate);
@@ -92,7 +119,7 @@ public class AdminBillServiceController {
                  System.out.println("The guest id is: " + guestID);
                  System.out.println("The bill id is: " + billID);
                  
-                 String guestName = fetchGuestName(connection, guestID);
+                 guestName = fetchGuestName(connection, guestID);
                  
                  System.out.println("The guest name is: " + guestName);
                  
@@ -100,12 +127,48 @@ public class AdminBillServiceController {
                  
                  System.out.println("The bill amount is: " + amount);
                  
-                 List<Room> bookedRoom = fetchRooms(connection, bookID);
+                 List<Room> bookedRooms = fetchRooms(connection, bookID);
                  
-                 for (Room room : bookedRoom) {
+                 for (Room room : bookedRooms) {
                 	 System.out.println("room info: " + room.getRoomID() + " " + room.getRoomType() + " " + room.getPrice());
                  }
                  
+                 Map<RoomTypeName, Integer> roomTypeCount = new HashMap<>();
+                 Map<RoomTypeName, Double> roomTypePrice = new HashMap<>();
+
+                 // Count occurrences of each room type and store their prices
+                 for (Room room : bookedRooms) {
+                     RoomTypeName roomType = room.getRoomType();
+                     roomTypeCount.put(roomType, roomTypeCount.getOrDefault(roomType, 0) + 1);
+                     roomTypePrice.put(roomType, room.getPrice());
+                     totalRooms++;
+                 }
+
+                 StringBuilder roomTypesInfo = new StringBuilder();
+                 for (Map.Entry<RoomTypeName, Integer> entry : roomTypeCount.entrySet()) {
+                     RoomTypeName roomType = entry.getKey();
+                     int count = entry.getValue();
+                     double price = roomTypePrice.get(roomType);
+                     roomTypesInfo.append(roomType).append(": ").append(count).append(" room(s) - $").append(price).append(" per room\n");
+                 }
+                 
+                 roomTypesInfo.append("Total Rooms: ").append(totalRooms).append(" room(s)\n");
+                 
+                 String billInfo = "Bill information is as following: \n\n" + 
+                		 			"Guest: " + guestName + "\n\n" +
+                		 			"Booking ID: " + bookID + "\n\n" +                		 			
+                		 			"Bill ID: " + billID + "\n\n" + 
+                		 			"Bill status: " + billStatus + "\n\n" +
+                		 			"Check in date: " + checkInDate + "\n" +
+                		 			"Check out date: " + checkOutDate + "\n\n" +
+                		 			"Booked for: " + 
+                		 			(checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24) + " days\n\n" +
+                		 			"Rooms: \n" +
+                		 			roomTypesInfo.toString() + "\n" +
+                		 			"Total amount: $" + amount + "\n\n";
+                 
+                 textArea.setText(billInfo);	 	
+                 totalRooms = 0;
              }
 
          } catch (SQLException e) {
@@ -114,6 +177,35 @@ public class AdminBillServiceController {
          }
     }
     
+    @FXML
+    void handleCheckOut(ActionEvent event) {
+    	System.out.println("\ncheck out button is clicked\n");    	
+    	
+    	try (Connection connection = SqliteConnection.Connector()){
+    		
+    		String updateBillStatusQuery = "UPDATE Bills SET status = ? WHERE billID = ?";
+        	String updateRoomAvailabilityQuery = "UPDATE Rooms SET available = ? WHERE roomID = ?";
+        	
+        	try (PreparedStatement ps1 = connection.prepareStatement(updateBillStatusQuery)) {
+                ps1.setString(1, "paid");
+                ps1.setInt(2, billID);
+                ps1.executeUpdate();
+            }
+        	
+        	try (PreparedStatement ps2 = connection.prepareStatement(updateRoomAvailabilityQuery)) {
+        		for (int roomID : roomIDs) {
+        			ps2.setInt(1, 1);
+                    ps2.setInt(2, roomID);
+                    ps2.executeUpdate();
+        		} 
+            }
+        	
+        	showAlert(Alert.AlertType.INFORMATION, "Success", guestName + " has been checked out successfully!");
+    		
+    	}catch(SQLException e){
+    		System.err.println("Error during checkout: " + e.getMessage());
+    	}    	
+    }
     
     // helper function to show the Alert on the screen
        public void showAlert(Alert.AlertType type, String title, String content) {
@@ -152,12 +244,12 @@ public class AdminBillServiceController {
    	    return amount;
        }
        
-       public List<Room> fetchRooms(Connection connection, int bookID) throws SQLException {
-    	    List<Integer> roomIDs = new ArrayList<>();
-      	    List<Room> rooms = new ArrayList<>();
-      	    String query = "SELECT roomID FROM ReservationRooms WHERE bookID = ?";
+       public List<Room> fetchRooms(Connection connection, int reservationID) throws SQLException {
+//    	    List<Integer> roomIDs = new ArrayList<>();
+//      	    List<Room> rooms = new ArrayList<>();
+      	    String query = "SELECT roomID FROM ReservationRooms WHERE reservationID = ?";
       	    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-      	        preparedStatement.setInt(1, bookID);
+      	        preparedStatement.setInt(1, reservationID);
       	        ResultSet resultSet = preparedStatement.executeQuery();
       	        while (resultSet.next()) {
       	            roomIDs.add(resultSet.getInt("roomID"));

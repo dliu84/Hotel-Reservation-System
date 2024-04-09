@@ -540,8 +540,9 @@ public class AdminBookRoomController implements Initializable{
     	    }
     	    
     	    // Insert bill into Bills table
-    	    PreparedStatement psBill = conn.prepareStatement("INSERT INTO Bills (amount) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-    	    psBill.setDouble(1, bill.getAmount()); // Assuming you have an amount variable
+    	    PreparedStatement psBill = conn.prepareStatement("INSERT INTO Bills (amount, status) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+    	    psBill.setDouble(1, bill.getAmount());
+    	    psBill.setString(2,  "outstanding");
     	    psBill.executeUpdate();
 
     	    // Retrieve the auto-generated billID
