@@ -41,7 +41,6 @@ import models.Bill;
 import models.Guest;
 import models.Reservation;
 import models.Room;
-import models.RoomManager;
 import models.RoomTypeName;
 import models.SqliteConnection;
 
@@ -142,7 +141,7 @@ public class AdminBookRoomController implements Initializable{
     	
     	PreparedStatement ps = null;
         ResultSet resultSet = null;
-        //String query = "SELECT COUNT(*) AS room_count FROM Rooms";
+        
         String query = "SELECT COUNT(*) AS room_count FROM Rooms WHERE available = 1";
 
         try {

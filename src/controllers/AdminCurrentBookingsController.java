@@ -121,9 +121,6 @@ public class AdminCurrentBookingsController implements Initializable {
             	 guestName = fetchGuestName(conn, guestID);
             	 
             	 double amount = fetchBillAmount(conn, billID);
-            	             	 
-//                 System.out.println("Booking No: " + bookID + " guest name: " + guestName + " amount: " + amount + " days: " + 
-//                		 (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24) + "\n\n");
                  
                  long diffInMillies = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
                  int days = (int) TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
@@ -188,7 +185,6 @@ public class AdminCurrentBookingsController implements Initializable {
             setRoomStatus(selectedBooking.getBookID(), 1);
             
             // 3. delete ReservationRooms
-            
             // Delete the related row in the ReservationRooms table
             deleteReservationRoom(selectedBooking.getBookID());
         	
@@ -272,7 +268,6 @@ public class AdminCurrentBookingsController implements Initializable {
         }
     }
 
-    
     public double fetchBillAmount(Connection connection, int billID) throws SQLException {
    	    double amount = 0;
    	    String query = "SELECT amount FROM Bills WHERE billID = ?";
@@ -304,8 +299,6 @@ public class AdminCurrentBookingsController implements Initializable {
 	}
     
     public List<Room> fetchRooms(Connection connection, int reservationID) throws SQLException {
-//	    List<Integer> roomIDs = new ArrayList<>();
-//  	    List<Room> rooms = new ArrayList<>();
   	    String query = "SELECT roomID FROM ReservationRooms WHERE reservationID = ?";
   	    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
   	        preparedStatement.setInt(1, reservationID);

@@ -248,8 +248,7 @@ public class AdminBillServiceController {
 	}
 
 	public List<Room> fetchRooms(Connection connection, int reservationID) throws SQLException {
-//    	    List<Integer> roomIDs = new ArrayList<>();
-//      	    List<Room> rooms = new ArrayList<>();
+
 		String query = "SELECT roomID FROM ReservationRooms WHERE reservationID = ?";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			preparedStatement.setInt(1, reservationID);

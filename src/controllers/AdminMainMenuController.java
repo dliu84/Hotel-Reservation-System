@@ -80,11 +80,6 @@ public class AdminMainMenuController {
     @FXML
     void handleCurrBookings(ActionEvent event) {
     	 try {
-//             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminCurrentBookings.fxml"));
-//             Parent root = loader.load();
-//             Stage stage = new Stage();
-//             stage.setScene(new Scene(root));
-//             stage.show();
     		 	((Node)event.getSource()).getScene().getWindow().hide();
     			Stage primaryStage = new Stage();
     			FXMLLoader loader = new FXMLLoader();
@@ -99,13 +94,7 @@ public class AdminMainMenuController {
     }
 
     @FXML
-    void handleExit(ActionEvent event) throws IOException {
-//    	Stage primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-//    	AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/views/WelcomePage.fxml"));
-//    	Scene scene = new Scene(root,484,294);
-//		primaryStage.setScene(scene);
-//		primaryStage.show();
-    	
+    void handleExit(ActionEvent event) throws IOException {   	
     	((Node)event.getSource()).getScene().getWindow().hide();
 		Stage primaryStage = new Stage();
 		FXMLLoader loader = new FXMLLoader();

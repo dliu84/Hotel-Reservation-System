@@ -133,7 +133,7 @@ public class GuestBookRoomController implements Initializable{
     	
     	PreparedStatement ps = null;
         ResultSet resultSet = null;
-        //String query = "SELECT COUNT(*) AS room_count FROM Rooms";
+        
         String query = "SELECT COUNT(*) AS room_count FROM Rooms WHERE available = 1";
 
         try {

@@ -16,7 +16,6 @@ import controllers.WelcomePageController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import models.Room;
-import models.RoomManager;
 import models.RoomTypeName;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;

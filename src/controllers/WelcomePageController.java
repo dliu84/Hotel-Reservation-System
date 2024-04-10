@@ -16,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Room;
-import models.RoomManager;
 
 public class WelcomePageController implements Initializable {
 
@@ -26,21 +25,7 @@ public class WelcomePageController implements Initializable {
     @FXML
     private Button guest;
     
-    
     private List<Room> rooms;
-    
-//    public void setRooms(List<Room> rooms) {
-//        this.rooms = rooms;
-//        System.out.println("number of rooms in WelcomePage is: " + rooms.size());
-//    }
-    
-//    @FXML
-//    public void initialize() {
-//    	RoomManager roomManager = RoomManager.getInstance();
-//        rooms = roomManager.getRooms();
-//        System.out.println("number of rooms in WelcomePage is: " + rooms.size());
-//    	
-//    }
 
     @FXML
     void handleAdmin(ActionEvent event) {
