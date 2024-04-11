@@ -293,6 +293,8 @@ public class GuestBookRoomController implements Initializable{
 			            showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
 			            return;
 			        }
+			        
+			        System.out.println("the noOfSingle is: " + noOfSingle);
 
 			        // Retrieve SINGLE rooms from the database
 			        List<Room> singleRooms = retrieveRoomsFromDatabase(RoomTypeName.SINGLE, noOfSingle); // This method should retrieve SINGLE rooms from the database
@@ -326,6 +328,8 @@ public class GuestBookRoomController implements Initializable{
 			            return;
 			        }
 
+				 System.out.println("the noOfDouble is: " + noOfDouble);
+				 
 			        // Retrieve SINGLE rooms from the database
 			        List<Room> doubleRooms = retrieveRoomsFromDatabase(RoomTypeName.DOUBLE, noOfDouble); // This method should retrieve SINGLE rooms from the database
 
@@ -355,6 +359,8 @@ public class GuestBookRoomController implements Initializable{
 			            showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
 			            return;
 			        }
+				 
+				 System.out.println("the noOfDelux is: " + noOfDelux);
 
 			        // Retrieve SINGLE rooms from the database
 			        List<Room> deluxRooms = retrieveRoomsFromDatabase(RoomTypeName.DELUX, noOfDelux); // This method should retrieve SINGLE rooms from the database
@@ -386,6 +392,8 @@ public class GuestBookRoomController implements Initializable{
 			            showAlert(Alert.AlertType.ERROR, "Error", "Please enter a valid positive number.");
 			            return;
 			        }
+				 
+				 System.out.println("the noOfPentHouse is: " + noOfPentHouse);
 
 			        // Retrieve SINGLE rooms from the database
 			        List<Room> pentHouseRooms = retrieveRoomsFromDatabase(RoomTypeName.PENTHOUSE, noOfPentHouse); // This method should retrieve SINGLE rooms from the database

@@ -93,11 +93,19 @@ public class AdminCurrentBookingsController implements Initializable {
     	
     	PreparedStatement ps = null;
         ResultSet resultSet = null;
-        String query = "SELECT COUNT(*) AS reservation_count FROM Reservations";
+//        String query = "SELECT COUNT(*) AS reservation_count FROM Reservations";
+        String query = "SELECT COUNT(*) AS reservation_count " +
+                "FROM Reservations " +
+                "INNER JOIN Bills ON Reservations.billID = Bills.billID " +
+                "WHERE Bills.status <> 'paid'";
         
         PreparedStatement psBookings = null;
         ResultSet resultSetBookings = null;
-        String queryBookings = "SELECT * FROM Reservations";
+//        String queryBookings = "SELECT * FROM Reservations";
+        String queryBookings = "SELECT Reservations.* " +
+                "FROM Reservations " +
+                "INNER JOIN Bills ON Reservations.billID = Bills.billID " +
+                "WHERE Bills.status <> 'paid'";
 
         try {
             ps = conn.prepareStatement(query);

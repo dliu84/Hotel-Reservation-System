@@ -17,6 +17,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import models.Room;
 import models.RoomTypeName;
+import models.SqliteConnection;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -32,6 +33,10 @@ public class Main extends Application {
 	
 	private TextArea ta = new TextArea();
 	
+//	private static final String UPDATE_ROOMS_AVAILABILITY = "UPDATE Rooms SET available = 1 WHERE available = 0";
+//	private static final String DELETE_BILLS_SQL = "DELETE FROM Bills";
+//	Connection conn;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -42,6 +47,53 @@ public class Main extends Application {
 
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			
+//			conn = SqliteConnection.Connector();
+//			if (conn == null) {
+//	    		System.out.println("Connection is not successful in Main.");
+//	    		System.exit(1);
+//	    	}
+//	    	else {
+//	    		System.out.println("Connection is successful in Main!!!");
+//	    	} 
+//	        
+//	        PreparedStatement ps = null;
+//	        
+//	        try {
+//	        	ps = conn.prepareStatement(UPDATE_ROOMS_AVAILABILITY);
+//	        	boolean result = ps.execute();
+//	       	 	if (result) {
+//	    			System.out.println("Error updating Rooms table avilable column.");
+//	    		}else {
+//	    			System.out.println("The Rooms table avilable column is set to 1!!!!!!!!!!!!!");
+//	    		}
+//	        }catch(Exception e) {
+//	        	e.printStackTrace();
+//	        }
+			
+//			conn = SqliteConnection.Connector();
+//			if (conn == null) {
+//	    		System.out.println("Connection is not successful in Main.");
+//	    		System.exit(1);
+//	    	}
+//	    	else {
+//	    		System.out.println("Connection is successful in Main!!!");
+//	    	} 
+//	        
+//	        PreparedStatement ps = null;
+//	        
+//	        try {
+//	        	ps = conn.prepareStatement(DELETE_BILLS_SQL);
+//	        	boolean result = ps.execute();
+//	       	 	if (result) {
+//	    			System.out.println("Error deleting bills rows.");
+//	    		}else {
+//	    			System.out.println("The Bills rows are deleted!!!!!!!!!!!!!");
+//	    		}
+//	        }catch(Exception e) {
+//	        	e.printStackTrace();
+//	        }
+			
 			
 			try {
 				socket = new Socket("localhost",8000);
