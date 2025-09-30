@@ -23,7 +23,6 @@ public class Login {
     	try {
 			return !conn.isClosed();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -55,11 +54,6 @@ public class Login {
     		resultSet.close();
     	}
     }
-//    public Login(int id, String password) {
-//        this.id = id;
-//        this.password = password;  
-//    }
-
     
     // Getters and setters
     public int getId() {
@@ -79,47 +73,6 @@ public class Login {
     }
 }
 
-/*import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
-public class Login {
-    private StringProperty userName;
-    private StringProperty password;
-
-    public Login(String userName, String password) {
-        this.userName = new SimpleStringProperty(userName);
-        this.password = new SimpleStringProperty(password);
-    }
-
-	public final StringProperty userNameProperty() {
-		return this.userName;
-	}
-	
-
-	public final String getUserName() {
-		return this.userNameProperty().get();
-	}
-	
-
-	public final void setUserName(final String userName) {
-		this.userNameProperty().set(userName);
-	}
-	
-
-	public final StringProperty passwordProperty() {
-		return this.password;
-	}
-	
-
-	public final String getPassword() {
-		return this.passwordProperty().get();
-	}
-	
-
-	public final void setPassword(final String password) {
-		this.passwordProperty().set(password);
-	}
-}*/
 
 
 

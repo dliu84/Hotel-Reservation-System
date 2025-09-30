@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class SqliteConnection {
 	private static final String DB_JDBC = "jdbc:sqlite:";
-	//private static final String DB_CONNECTION = "/Users/mayflower/Documents/APD545/practice/Project_HotelReservationSystem/";
+	
 	private static final String DB_NAME = "database.db";
 	
 	public static Connection Connector() {
