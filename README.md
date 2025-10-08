@@ -101,8 +101,6 @@ git clone https://github.com/dliu84/Hotel-Reservation-System.git
 - **Professor Mahboob Ali** (Instructor, Seneca Polytechnic, APD545, 2024 Winter)  
 - **Di Liu** - [dliu84](https://github.com/dliu84)  
 
-## Citation
+## License
 
-If you use this project in your work, please cite it as follows:
-
-> Di Liu (2025). *Hotel-Reservation-System*. GitHub. [https://github.com/dliu84/Hotel-Reservation-System](https://github.com/dliu84/Hotel-Reservation-System)
+This project is licensed under the [MIT License](LICENSE).
